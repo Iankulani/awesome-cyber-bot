@@ -4,3 +4,12 @@
 
 
 awesome cyber bot
+
+# How to clone the repo
+```bash
+git clone https://github.com/Iankulani/awesome-cyber-bot.git
+cd awesome-cyber-bot
+```
+
+  # How to run
+  
