@@ -1,0 +1,79 @@
+# Awesome Cyber Bot - Alpine Linux Docker Image
+# Build: docker build -t awesome-cyber-bot .
+# Run: docker run -it --rm --cap-add=NET_ADMIN --cap-add=NET_RAW awesome-cyber-bot
+
+FROM alpine:3.19
+
+LABEL maintainer="Awesome Cyber Bot Team"
+LABEL description="Ultimate cybersecurity tool with 3000+ commands"
+LABEL version="1.0.0"
+
+# Install system dependencies
+RUN apk update && apk upgrade && \
+    apk add --no-cache \
+    # Python and tools
+    python3 py3-pip python3-dev \
+    # Network tools
+    nmap nmap-scripts nmap-ncat \
+    netcat-openbsd \
+    traceroute \
+    curl \
+    bind-tools \
+    openssh-client \
+    iproute2 \
+    iptables \
+    # Build tools
+    gcc musl-dev linux-headers \
+    # Utilities
+    git wget unzip \
+    # Web tools
+    nikto \
+    # Java for signal-cli
+    openjdk11-jre-headless \
+    # Extra
+    tzdata ca-certificates
+
+# Create app directory
+WORKDIR /app
+
+# Copy requirements first for better caching
+COPY requirements.txt .
+
+# Install Python packages
+RUN pip3 install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip3 install --no-cache-dir -r requirements.txt
+
+# Install signal-cli
+RUN wget -O /tmp/signal-cli.tar.gz https://github.com/AsamK/signal-cli/releases/download/v0.12.2/signal-cli-0.12.2.tar.gz && \
+    tar xf /tmp/signal-cli.tar.gz -C /opt/ && \
+    ln -sf /opt/signal-cli-*/bin/signal-cli /usr/local/bin/signal-cli
+
+# Copy application files
+COPY awesome_cyber_bot.py .
+COPY requirements-check.py .
+COPY run.sh .
+COPY . .
+
+# Make scripts executable
+RUN chmod +x run.sh requirements-check.py
+
+# Create necessary directories
+RUN mkdir -p /app/.awesome_cyber_bot /app/reports /app/temp
+
+# Install Chrome for WhatsApp (optional - larger image)
+# Uncomment below for WhatsApp support
+# RUN apk add --no-cache chromium chromium-chromedriver
+
+# Set environment variables
+ENV PYTHONUNBUFFERED=1
+ENV TZ=UTC
+
+# Expose ports (phishing server default)
+EXPOSE 8080 4444 5555
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD python3 -c "import sys; sys.exit(0)" || exit 1
+
+# Run with entrypoint
+ENTRYPOINT ["./run.sh"]

@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  awesome-cyber-bot:
+    build: .
+    container_name: awesome-cyber-bot
+    stdin_open: true
+    tty: true
+    # Required capabilities for raw sockets and firewall
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+      - SYS_ADMIN
+    # For Selenium/Chrome (uncomment if needed)
+    # shm_size: 2gb
+    volumes:
+      # Persist data
+      - ./data/.awesome_cyber_bot:/app/.awesome_cyber_bot
+      - ./data/reports:/app/reports
+      - ./data/temp:/app/temp
+      # Mount config files
+      - ./config:/app/.awesome_cyber_bot
+    ports:
+      - "8080:8080"   # Phishing server
+      - "4444:4444"   # Netcat listener
+      - "5555:5555"   # Additional listener
+    networks:
+      - cyber-net
+    restart: unless-stopped
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+
+  # Optional: Shodan CLI helper
+  shodan-cli:
+    image: shodan/shodan-cli:latest
+    container_name: shodan-cli
+    environment:
+      - SHODAN_API_KEY=${SHODAN_API_KEY}
+    volumes:
+      - ./data/shodan:/root/.shodan
+    networks:
+      - cyber-net
+    profiles:
+      - tools
+
+  # Optional: Nmap scanning service
+  nmap-service:
+    image: instrumentisto/nmap:latest
+    container_name: nmap-scanner
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    networks:
+      - cyber-net
+    profiles:
+      - tools
+
+networks:
+  cyber-net:
+    driver: bridge
+    name: awesome-cyber-net

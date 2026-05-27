@@ -1,0 +1,94 @@
+# Awesome Cyber Bot - Makefile
+# Usage: make install, make run, make docker, make clean
+
+.PHONY: help install uninstall run test clean docker docker-run check
+
+# Variables
+PYTHON = python3
+PIP = pip3
+VENV = venv
+VENV_ACTIVATE = . $(VENV)/bin/activate
+DOCKER_IMAGE = awesome-cyber-bot
+DOCKER_TAG = latest
+
+# Colors
+GREEN = \033[0;32m
+RED = \033[0;31m
+YELLOW = \033[1;33m
+NC = \033[0m
+
+help:
+	@echo "$(GREEN)Awesome Cyber Bot - Makefile Commands$(NC)"
+	@echo ""
+	@echo "  $(YELLOW)make install$(NC)    - Install all dependencies"
+	@echo "  $(YELLOW)make run$(NC)        - Run the bot"
+	@echo "  $(YELLOW)make test$(NC)       - Run tests"
+	@echo "  $(YELLOW)make docker$(NC)     - Build Docker image"
+	@echo "  $(YELLOW)make docker-run$(NC) - Run Docker container"
+	@echo "  $(YELLOW)make check$(NC)      - Check requirements"
+	@echo "  $(YELLOW)make clean$(NC)      - Clean up files"
+	@echo "  $(YELLOW)make uninstall$(NC)  - Remove installation"
+
+install:
+	@echo "$(GREEN)Installing Awesome Cyber Bot...$(NC)"
+	@$(PYTHON) -m venv $(VENV)
+	@$(VENV_ACTIVATE) && $(PIP) install --upgrade pip
+	@$(VENV_ACTIVATE) && $(PIP) install -r requirements.txt
+	@chmod +x run.sh
+	@echo "$(GREEN)Installation complete! Run 'make run' to start$(NC)"
+
+run:
+	@echo "$(GREEN)Starting Awesome Cyber Bot...$(NC)"
+	@./run.sh
+
+test:
+	@echo "$(GREEN)Running tests...$(NC)"
+	@$(VENV_ACTIVATE) && python requirements-check.py
+	@$(VENV_ACTIVATE) && python -c "import awesome_cyber_bot; print('OK')"
+
+docker:
+	@echo "$(GREEN)Building Docker image...$(NC)"
+	@docker build -t $(DOCKER_IMAGE):$(DOCKER_TAG) .
+
+docker-run:
+	@echo "$(GREEN)Running Docker container...$(NC)"
+	@docker run -it --rm \
+		--cap-add=NET_ADMIN --cap-add=NET_RAW \
+		-p 8080:8080 -p 4444:4444 \
+		-v $(PWD)/data:/app/data \
+		$(DOCKER_IMAGE):$(DOCKER_TAG)
+
+check:
+	@echo "$(GREEN)Checking requirements...$(NC)"
+	@$(VENV_ACTIVATE) && python requirements-check.py
+
+clean:
+	@echo "$(YELLOW)Cleaning up...$(NC)"
+	@rm -rf $(VENV) __pycache__ *.pyc .cache
+	@rm -rf .awesome_cyber_bot reports temp
+	@find . -name "*.pyc" -delete
+	@find . -name "__pycache__" -delete
+	@echo "$(GREEN)Cleanup complete$(NC)"
+
+uninstall:
+	@echo "$(RED)Uninstalling...$(NC)"
+	@rm -rf $(VENV) .awesome_cyber_bot reports temp
+	@rm -f run.sh run.bat
+	@echo "$(GREEN)Uninstall complete$(NC)"
+
+# Development targets
+dev-setup: install
+	@$(VENV_ACTIVATE) && $(PIP) install black flake8 mypy pytest pytest-cov
+
+lint:
+	@$(VENV_ACTIVATE) && black awesome_cyber_bot.py
+	@$(VENV_ACTIVATE) && flake8 awesome_cyber_bot.py --max-line-length=120
+
+format:
+	@$(VENV_ACTIVATE) && black awesome_cyber_bot.py
+
+coverage:
+	@$(VENV_ACTIVATE) && pytest --cov=awesome_cyber_bot --cov-report=html
+
+# Quick start
+quick: install run
