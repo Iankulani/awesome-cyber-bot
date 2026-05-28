@@ -9,7 +9,8 @@ Whether you are a student learning cybersecurity fundamentals, a teacher deliver
 
 At its core, the bot combines scanning tools, network automation, and cyber drill simulations into a single, intelligent system that can be controlled through platforms like Telegram, WhatsApp, Discord, Slack, and iMessage. This makes it not just a tool, but a collaborative cybersecurity assistant that fits into modern communication workflows.
 
-Key Features
+# Key Features
+
 1. Cybersecurity Scanning Engine
 
 Awesome-Cyber-Bot includes a robust scanning system capable of identifying vulnerabilities, misconfigurations, and potential threats across networks and systems.
