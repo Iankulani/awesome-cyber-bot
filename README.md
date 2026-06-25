@@ -259,4 +259,7 @@ cd awesome-cyber-bot
 ```
 
   # How to run
+  ```bash
+python awesome-cyber-bot.py
+``` 
   
