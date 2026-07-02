@@ -2,6 +2,15 @@
 
 <img width="502" height="536" alt="half" src="https://github.com/user-attachments/assets/56ccbe63-63ed-47f9-bc58-104e9ee66844" />
 
+[![GitHub stars](https://img.shields.io/github/stars/Iankulani/awesome-cyber-bot?style=for-the-badge&logo=github)](https://github.com/Iankulani/awesome-cyber-bot/stargazers)
+[![GitHub forks](https://img.shields.io/github/forks/Iankulani/awesome-cyber-bot?style=for-the-badge&logo=github)](https://github.com/Iankulani/awesome-cyber-bot/network)
+[![GitHub watchers](https://img.shields.io/github/watchers/Iankulani/awesome-cyber-bot?style=for-the-badge&logo=github)](https://github.com/Iankulani/awesome-cyber-bot/watchers)
+[![GitHub contributors](https://img.shields.io/github/contributors/Iankulani/awesome-cyber-bot?style=for-the-badge&logo=github)](https://github.com/Iankulani/awesome-cyber-bot/graphs/contributors)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Iankulani/awesome-cyber-bot?style=for-the-badge&logo=git)](https://github.com/Iankulani/awesome-cyber-bot/commits/main)
+[![License](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows%20%7C%20macOS-blue?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/Iankulani/awesome-cyber-bot)
+[![Python](https://img.shields.io/badge/python-3.x-blue?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+
 
 Awesome-Cyber-Bot is a powerful, modern cybersecurity automation platform designed to simplify, enhance, and scale security operations across multiple environments. Built with flexibility and accessibility in mind, the bot empowers both beginners and professionals to perform advanced cybersecurity tasks using simple commands across widely used communication platforms.
 
